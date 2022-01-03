@@ -23,10 +23,12 @@ var (
 	userRepo          repository.UserRepository    = repository.NewUserRepo(db)
 	userService       service.UserService          = service.NewUserService(userRepo)
 	userController    controller.UserController    = controller.NewUserController(userService)
-	cartRepo	repository.CartRepository = repository.NewCartRepo(mongodb)
-	cartService service.CartService = service.NewCartService(cartRepo)
-	cartController controller.CartController = controller.NewCartController(cartService)
-
+	cartRepo          repository.CartRepository    = repository.NewCartRepo(mongodb)
+	cartService       service.CartService          = service.NewCartService(cartRepo)
+	cartController    controller.CartController    = controller.NewCartController(cartService)
+	orderRepo         repository.OrderRepository   = repository.NewOrderRepository(db)
+	orderService      service.OrderService         = service.NewOrderService(orderRepo)
+	orderController   controller.OrderController   = controller.NewOrderController(orderService)
 )
 
 func MainServer() *Server {
@@ -79,22 +81,40 @@ func (s *Server) Router() *gin.Engine {
 
 	cartRoute := route.Group(apiName + "/cart")
 	{
-		cartRoute.GET("/", func (ctx *gin.Context) {
+		cartRoute.GET("/", func(ctx *gin.Context) {
 			cartController.FindAllCart(ctx)
 		})
-		cartRoute.POST("/", func (ctx *gin.Context) {
+		cartRoute.POST("/", func(ctx *gin.Context) {
 			cartController.CreateCart(ctx)
 		})
-		cartRoute.GET("/:order_id", func (ctx *gin.Context) {
+		cartRoute.GET("/:order_id", func(ctx *gin.Context) {
 			cartController.FindOneCart(ctx)
 		})
-		cartRoute.PUT("/:order_id", func (ctx *gin.Context) {
+		cartRoute.PUT("/:order_id", func(ctx *gin.Context) {
 			cartController.UpdateOneCart(ctx)
 		})
-		cartRoute.DELETE("/:order_id", func (ctx *gin.Context) {
+		cartRoute.DELETE("/:order_id", func(ctx *gin.Context) {
 			cartController.DeleteOneCart(ctx)
 		})
 	}
 
+	orderRoute := route.Group(apiName + "/order")
+	{
+		orderRoute.GET("/", func(ctx *gin.Context) {
+			orderController.FindAll(ctx)
+		})
+		orderRoute.POST("/", func(ctx *gin.Context) {
+			orderController.CreateOrder(ctx)
+		})
+		orderRoute.GET("/:order_id", func(ctx *gin.Context) {
+			orderController.FindOne(ctx)
+		})
+		orderRoute.PUT("/:order_id", func(ctx *gin.Context) {
+			orderController.UpdateOne(ctx)
+		})
+		orderRoute.DELETE("/:order_id", func(ctx *gin.Context) {
+			orderController.DeleteOne(ctx)
+		})
+	}
 	return route
 }
