@@ -8,7 +8,7 @@ import (
 type ProductService interface {
 	CreateProduct(product entity.Product)
 	GetProductID(productId int) entity.Product
-	GetProducts(query map[string]interface{}) []entity.Product
+	GetProducts(query map[string]string, condition map[string]interface{}) []entity.Product
 	UpdateProduct(product entity.Product, productId int)
 	DeleteProduct(productId int)
 	BulkCreateProduct()
@@ -32,8 +32,9 @@ func (c *productService) GetProductID(productId int) entity.Product {
 	return c.productRepo.GetProduct(productId)
 }
 
-func (c *productService) GetProducts(query map[string]interface{}) []entity.Product {
-	return c.productRepo.GetProducts(query)
+func (c *productService) GetProducts(query map[string]string, condition map[string]interface{}) []entity.Product {
+	
+	return c.productRepo.GetProducts(query, condition)
 }
 
 func (c *productService) UpdateProduct(product entity.Product, productId int) {

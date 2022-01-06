@@ -13,7 +13,7 @@ import (
 type ProductRepository interface {
 	SaveProduct(product entity.Product)
 	GetProduct(productId int) entity.Product
-	GetProducts(query map[string]interface{}) []entity.Product
+	GetProducts(pagination map[string]string, condition map[string]interface{}) []entity.Product
 	UpdateProduct(product entity.Product, productId int)
 	DeleteProduct(productId int)
 	BulkCreateProduct()
@@ -35,8 +35,32 @@ func NewProductRepo(db *gorm.DB) ProductRepository {
 
 func filterProduct(query map[string]interface{}) func (db *gorm.DB)*gorm.DB {
 	return func (db *gorm.DB) *gorm.DB {
-		var products []entity.Product
-		return db.Where(query).Find(&products)
+		modelProduct := db.Model(&entity.Product{})
+		
+		fmt.Println(query)
+		if query["name"] != nil {
+			modelProduct = modelProduct.Where("name LIKE ?", "%" + query["name"].(string) + "%")
+		}
+		if query["price"] != nil {
+			modelProduct = modelProduct.Where("price = ?", query["price"])
+		}
+		if query["category_id"] != nil  {
+			modelProduct = modelProduct.Where("category_id IN ?", query["category_id"])
+		}
+		if query["stock"] != "" {
+			fmt.Println()
+			modelProduct = modelProduct.Where("stock > ?", 0)
+		}
+		if query["department_id"] != nil {
+			modelProduct = modelProduct.Where("department_id IN ?", query["department_id"])
+		}
+		if query["max_price"] != 0 {
+			modelProduct = modelProduct.Where("price < ?", query["max_price"])
+		}
+		if query["min_price"] != 0 {
+			modelProduct = modelProduct.Where("price > ?", query["min_price"])
+		}
+		return modelProduct
 	}
 }
 
@@ -50,15 +74,9 @@ func (c *productRepository) GetProduct(productId int) entity.Product {
 	return product
 }
 
-func (c *productRepository) GetProducts(query map[string]interface{}) []entity.Product {
+func (c *productRepository) GetProducts(pagination map[string]string, condition map[string]interface{}) []entity.Product {
 	var products []entity.Product
-	// c.db.Find(&products)
-	// return products
-	// return filterProduct(query, c.db)
-	queryPage := make(map[string]string)
-	queryPage["page"] = query["page"].(string)
-	queryPage["limit"] = query["limit"].(string)
-	c.db.Scopes(filterProduct(query), helper.Paginate(queryPage)).Find(&products)
+	c.db.Scopes(filterProduct(condition), helper.Paginate(pagination)).Find(&products)
 	return products
 }
 

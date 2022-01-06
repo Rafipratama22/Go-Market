@@ -3,6 +3,7 @@ package controller
 import (
 	"fmt"
 	"strconv"
+	"strings"
 
 	"github.com/Rafipratama22/go_market/entity"
 	"github.com/Rafipratama22/go_market/service"
@@ -54,10 +55,30 @@ func (c *productController) GetProductID(ctx *gin.Context) {
 }
 
 func (c *productController) GetProducts(ctx *gin.Context) {
-	pagination := make(map[string]interface{})
+	pagination := make(map[string]string)
 	pagination["page"] = ctx.Query("page")
 	pagination["limit"] = ctx.Query("limit")
-	productsData := c.productService.GetProducts(pagination)
+	query := make(map[string]interface{})
+	category_id := strings.Split(ctx.Query("category_id"), ",")
+	department_id := strings.Split(ctx.Query("department_id"), ",")
+	max_price, _ := strconv.Atoi(ctx.Query("max_price"))
+	min_price, _ := strconv.Atoi(ctx.Query("min_price"))
+	if len(category_id) > 1 {
+		query["category_id"] = category_id
+	} else {
+		query["category_id"] = nil
+	}
+	if len(department_id) > 1 {
+		query["department_id"] = department_id
+	} else {
+		query["department_id"] = nil
+	}
+	query["name"] = ctx.Query("name")
+	query["max_price"] = max_price
+	query["min_price"] = min_price
+	query["stock"] = ctx.Query("stock")
+	query["sort"] = ctx.Query("sort")
+	productsData := c.productService.GetProducts(pagination, query)
 	ctx.JSON(200, gin.H{
 		"data": productsData,
 	})
