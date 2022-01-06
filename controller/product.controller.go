@@ -15,6 +15,7 @@ type ProductController interface {
 	GetProducts(ctx *gin.Context)
 	UpdateProduct(ctx *gin.Context)
 	DeleteProduct(ctx *gin.Context)
+	BulkCreateProduct(ctx *gin.Context)
 }
 
 type productController struct {
@@ -30,6 +31,7 @@ func NewProductController(service service.ProductService) ProductController {
 func (c *productController) CreateProduct(ctx *gin.Context) {
 	var product entity.Product
 	err := ctx.ShouldBindJSON(&product)
+	fmt.Println(ctx.PostForm("name"))
 	if err != nil {
 		fmt.Println("error:", err)
 	}
@@ -52,7 +54,10 @@ func (c *productController) GetProductID(ctx *gin.Context) {
 }
 
 func (c *productController) GetProducts(ctx *gin.Context) {
-	productsData := c.productService.GetProducts()
+	pagination := make(map[string]interface{})
+	pagination["page"] = ctx.Query("page")
+	pagination["limit"] = ctx.Query("limit")
+	productsData := c.productService.GetProducts(pagination)
 	ctx.JSON(200, gin.H{
 		"data": productsData,
 	})
@@ -86,3 +91,14 @@ func (c *productController) DeleteProduct(ctx *gin.Context) {
 		"message": "Product deleted successfully",
 	})
 }
+
+func (c *productController) BulkCreateProduct(ctx *gin.Context) {
+	c.productService.BulkCreateProduct()
+	ctx.JSON(200, gin.H{
+		"message": "Product bulk created successfully",
+	})
+}
+
+// func (c *productController) ListCatalog(ctx *gin.Context) {
+
+// }

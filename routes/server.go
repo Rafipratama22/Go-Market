@@ -58,6 +58,9 @@ func (s *Server) Router() *gin.Engine {
 		productRoute.DELETE("/:id", func(c *gin.Context) {
 			productController.DeleteProduct(c)
 		})
+		productRoute.GET("/bulk/create", func(c *gin.Context) {
+			productController.BulkCreateProduct(c)
+		})
 	}
 
 	userRoute := route.Group(apiName + "/user")
