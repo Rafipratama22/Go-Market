@@ -66,7 +66,10 @@ func (s *Server) Router() *gin.Engine {
 	userRoute := route.Group(apiName + "/user")
 	{
 		userRoute.GET("/", func(c *gin.Context) {
-			userController.UserFindAll(c)
+			// userController.UserFindAll(c)
+			c.JSON(200, gin.H{
+				"message": "Hello World",
+			})
 		})
 		userRoute.POST("/", func(c *gin.Context) {
 			userController.CreateUser(c)
