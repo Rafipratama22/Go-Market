@@ -121,5 +121,21 @@ func (c *productController) BulkCreateProduct(ctx *gin.Context) {
 }
 
 // func (c *productController) ListCatalog(ctx *gin.Context) {
-
+// curl -X GET "localhost:9200/_search?pretty" -H 'Content-Type: application/json' -d'
+// {
+// 	"query": {
+// 	  "fuzzy": {
+// 		"user.id": {
+// 		  "value": "ki",
+// 		  "fuzziness": "AUTO",
+// 		  "max_expansions": 50,
+// 		  "prefix_length": 0,
+// 		  "transpositions": true,
+// 		  "rewrite": "constant_score"
+// 		}
+// 	  }
+// 	}
+//   }
+//   '
+  
 // }
