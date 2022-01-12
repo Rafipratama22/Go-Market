@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	gorm "github.com/jinzhu/gorm"
 	"go.mongodb.org/mongo-driver/mongo"
+	"github.com/Rafipratama22/go_market/middleware"
 )
 
 type Server struct {
@@ -29,6 +30,8 @@ var (
 	orderRepo         repository.OrderRepository   = repository.NewOrderRepository(db)
 	orderService      service.OrderService         = service.NewOrderService(orderRepo)
 	orderController   controller.OrderController   = controller.NewOrderController(orderService)
+	paymentService   service.PaymentService       = service.NewPaymentService(db)
+	paymentController controller.PaymentController = controller.NewPaymentController(paymentService)
 )
 
 func MainServer() *Server {
@@ -41,9 +44,17 @@ func (s *Server) Router() *gin.Engine {
 	route := gin.Default()
 	var apiName string = "/api/v1"
 
+	loginRoute := route.Group(apiName + "/login")
+	{
+		loginRoute.POST("/", func (ctx *gin.Context) {
+			userController.LoginUser(ctx)
+		})
+	}
+
+
 	productRoute := route.Group(apiName + "/product")
 	{
-		productRoute.GET("/", func(c *gin.Context) {
+		productRoute.GET("/", middleware.ValidateToken, func(c *gin.Context) {
 			productController.GetProducts(c)
 		})
 		productRoute.POST("/", func(c *gin.Context) {
@@ -82,6 +93,8 @@ func (s *Server) Router() *gin.Engine {
 		})
 	}
 
+	
+
 	cartRoute := route.Group(apiName + "/cart")
 	{
 		cartRoute.GET("/", func(ctx *gin.Context) {
@@ -119,5 +132,13 @@ func (s *Server) Router() *gin.Engine {
 			orderController.DeleteOne(ctx)
 		})
 	}
+
+	paymentRoute := route.Group(apiName + "/payment")
+	{
+		paymentRoute.POST("/", func(ctx *gin.Context) {
+			paymentController.CreatePayment(ctx)
+		})
+	}
+
 	return route
 }

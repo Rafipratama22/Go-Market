@@ -15,6 +15,7 @@ type UserController interface {
 	UserFindAll(ctx *gin.Context)
 	UpdateUser(ctx *gin.Context)
 	DeleteUser(ctx *gin.Context)
+	LoginUser(ctx *gin.Context)
 }
 
 type userController struct {
@@ -84,4 +85,22 @@ func (c *userController) DeleteUser(ctx *gin.Context) {
 	ctx.JSON(200, gin.H{
 		"message": "User deleted successfully",
 	})
+}
+
+func (c *userController) LoginUser(ctx *gin.Context) {
+	var user entity.User
+	err := ctx.ShouldBindJSON(&user)
+	if err != nil {
+		fmt.Println("error:", err)
+	}
+	userData, status := c.userService.LoginUser(user)
+	if !status {
+		ctx.JSON(200, gin.H{
+			"data": userData,
+		})
+	} else {
+		ctx.JSON(404, gin.H{
+			"message": "User not found",
+		})
+	}
 }

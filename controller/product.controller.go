@@ -55,6 +55,8 @@ func (c *productController) GetProductID(ctx *gin.Context) {
 }
 
 func (c *productController) GetProducts(ctx *gin.Context) {
+	user_id := ctx.MustGet("user_id")
+	fmt.Println(user_id)
 	pagination := make(map[string]string)
 	pagination["page"] = ctx.Query("page")
 	pagination["limit"] = ctx.Query("limit")

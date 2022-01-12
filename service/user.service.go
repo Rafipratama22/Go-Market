@@ -11,6 +11,7 @@ type UserService interface {
 	FindAll() []entity.User
 	UpdateUser(user entity.User, userId int)
 	DeleteUser(userId int)
+	LoginUser(user entity.User) (string, bool)
 }
 
 type userService struct {
@@ -41,4 +42,12 @@ func (c *userService) UpdateUser(user entity.User, userId int) {
 
 func (c *userService) DeleteUser(userId int) {
 	c.userRepo.DeleteUser(userId)
+}
+
+func (c *userService) LoginUser(user entity.User) (string, bool) {
+	return c.userRepo.LoginUser(user)
+}
+
+func (c *userService) FindName(name string) entity.User {
+	return c.userRepo.FindName(name)
 }

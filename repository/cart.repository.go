@@ -33,7 +33,7 @@ func NewCartRepo(db *mongo.Client) CartRepository {
 }
 
 func (c *cartRepository) CreateCart(cart schema.Cart) *mongo.InsertOneResult {
-	collection := c.db.Database("local").Collection("Carts")
+	collection := c.db.Database("Go-Market").Collection("Carts")
 	res, err := collection.InsertOne(context.TODO(), &cart)
 	if err != nil {
 		panic(err)
@@ -44,7 +44,7 @@ func (c *cartRepository) CreateCart(cart schema.Cart) *mongo.InsertOneResult {
 func (c *cartRepository) FindAll() []bson.M {
 	var results []bson.M
 	findOptions := options.Find()
-	collection := c.db.Database("local").Collection("Carts")
+	collection := c.db.Database("Go-Market").Collection("Carts")
 	cursor, err := collection.Find(context.TODO(), bson.D{}, findOptions)
 	if err != nil {
 		panic(err)
