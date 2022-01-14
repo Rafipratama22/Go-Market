@@ -2,9 +2,10 @@ package dto
 
 type OrderDetail struct {
 	OrderID string `json:"order_id" binding:"required"`
-	ProductBarcode string `json:"product_barcode" binding:"required"`
+	BarcodeNumber string `json:"barcode_number" binding:"required"`
 	Price int `json:"price" binding:"required"`
 	Quantity int `json:"quantity" binding:"required"`
+	UserID string `json:"user_id" binding:"required"`
 }
 
 type CreateOrder struct {
@@ -15,6 +16,7 @@ type CreateOrder struct {
 }
 
 type Address struct {
+	AddressID int `json:"address_id"`
 	AddressLine string `json:"address_line" binding:"required"`
 	ProvinceID int `json:"province_id" binding:"required"`
 	CityID int `json:"city_id" binding:"required"`

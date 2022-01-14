@@ -9,7 +9,7 @@ import (
 )
 
 type OrderRepository interface {
-	CreateOrder(body entity.Order, order_detail []entity.OrderDetail, address entity.Address) (entity.Order)
+	CreateOrder(body entity.Order, order_detail []entity.OrderDetail, address entity.Address, boolAddress bool) (entity.Order)
 	FindAll() []entity.Order
 	FindOne(order_id string) entity.Order
 	UpdateOne(order_id string, body entity.Order) entity.Order
@@ -26,10 +26,12 @@ func NewOrderRepository(db *gorm.DB) OrderRepository{
 	}
 }
 
-func (c *orderRepository) CreateOrder(body entity.Order, order_detail []entity.OrderDetail, address entity.Address) entity.Order{
+func (c *orderRepository) CreateOrder(body entity.Order, order_detail []entity.OrderDetail, address entity.Address, boolAddress bool) entity.Order{
 	c.db.Model(&order_detail).Create(&order_detail)
 	// fmt.Println(order_details)
-	c.db.Model(&address).Create(&address)
+	if !boolAddress {
+		c.db.Model(&address).Create(&address)
+	}
 	// fmt.Println(addresses)
 	body.AddressId = address.ID
 	body.Status = 1

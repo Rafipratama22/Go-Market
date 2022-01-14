@@ -32,9 +32,16 @@ func (c *orderService) CreateOrder(body dto.CreateOrder) (entity.Order) {
 	var order entity.Order
 	// var order_detail entity.OrderDetail
 	order_id := uuid.New().String()
+	var address entity.Address
+	var boolAddress bool
 	// var location []byte
 	// fmt.Println("order_id => " + order_id)
-	address := entity.Address{
+	if body.Address.AddressID == 0{
+		boolAddress = false
+	} else {
+		boolAddress = true
+	}
+	address = entity.Address{
 		AddressLine: body.Address.AddressLine,
 		ProvinceID: body.Address.ProvinceID,
 		CityID: body.Address.CityID,
@@ -45,27 +52,31 @@ func (c *orderService) CreateOrder(body dto.CreateOrder) (entity.Order) {
 		UserID: body.UserID,
 		Longitude: body.Address.Longitude,
 		Latitude: body.Address.Latitude,
+		PostalCode: body.Address.PostalCode,
 	}
 	var	order_detail []entity.OrderDetail
 	var total_price int
 	for i := 0; i < len(body.OrderDetail); i++ {
 		order_details := entity.OrderDetail{
 			OrderID: order_id,
-			ProductBarcode: body.OrderDetail[i].ProductBarcode,
+			ProductBarcode: body.OrderDetail[i].BarcodeNumber,
 			Price: body.OrderDetail[i].Price,
 			Quantity: body.OrderDetail[i].Quantity,
+			UserId: body.UserID,
 		}
 		total_price += body.OrderDetail[i].Price * body.OrderDetail[i].Quantity
-		fmt.Println(order_details)
+		fmt.Println(total_price)
 		order_detail = append(order_detail, order_details)
 	}
 	order = entity.Order{
 		OrderID: order_id,
 		UserID: body.UserID,
 		Notes: body.Notes,
+		TotalPrice: total_price,
+		Status: 1,
 	}
 	// fmt.Println(address)
-	c.repository.CreateOrder(order, order_detail, address)
+	c.repository.CreateOrder(order, order_detail, address, boolAddress)
 	return order
 }
 

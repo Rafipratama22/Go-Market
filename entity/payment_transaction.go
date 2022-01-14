@@ -5,6 +5,7 @@ type PaymentTransaction struct {
 	ID int `json:"id,omitempty" gorm:"auto_increment;primary_key"`
 	TransactionID string `json:"transaction_id" gorm:"type:varchar(100)"`
 	OrderID string `json:"order_id" gorm:"type:varchar(100)"`
+	Order Order `gorm:"foreignKey:order_id;"`
 	PaymentCredentialID string `json:"payment_credential_id" gorm:"type:varchar(100)"`
 	TransactionStatus string `json:"transaction_status" gorm:"type:varchar(100)"`
 	Information []byte `json:"information" gorm:"type:json"`
