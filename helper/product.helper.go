@@ -1,7 +1,8 @@
 package helper
 
 import (
-	"github.com/jinzhu/gorm"
+	// "github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 	"strconv"
 	// "github.com/gin-gonic/gin"
 )

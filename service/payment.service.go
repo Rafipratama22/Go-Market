@@ -5,7 +5,8 @@ import (
 	// "github.com/Rafipratama22/go_market/dto"
 	"fmt"
 
-	"github.com/jinzhu/gorm"
+	// "github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 	"encoding/json"
 	// "github.com/midtrans/midtrans-go"
 	"github.com/midtrans/midtrans-go"
@@ -141,10 +142,11 @@ func (c *paymentService) CreatePayment(payment MidtransConfig) *coreapi.ChargeRe
 	resultCharge.Information = changeJson
 	resultCharge.TotalPrice = payment.TotalPrice
 	c.db.Model(&resultCharge).Create(&resultCharge)
+	c.db.Model(&entity.Order{}).Where("order_id = ?", payment.OrderId).Update("payment_status", 1)
 	fmt.Println(resultCharge)
 	return coreApi
 }
 
 func (c *paymentService) CallbackPayment() {
-	
+	// var order entity.Order
 }

@@ -3,7 +3,8 @@ package repository
 import (
 	"github.com/Rafipratama22/go_market/entity"
 	"github.com/Rafipratama22/go_market/helper"
-	"github.com/jinzhu/gorm"
+	// "github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -81,7 +82,7 @@ func (c *productRepository) GetProducts(pagination map[string]string, condition 
 }
 
 func (c *productRepository) UpdateProduct(product entity.Product, productId int) {
-	c.db.Model(&product).Where("id = ?", productId).Update(&product)
+	c.db.Model(&product).Where("id = ?", productId).Updates(&product)
 }
 
 func (c *productRepository) DeleteProduct(productId int) {

@@ -2,7 +2,8 @@ package repository
 
 import (
 	"github.com/Rafipratama22/go_market/entity"
-	"github.com/jinzhu/gorm"
+	// "github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 	"fmt"
 	"github.com/Rafipratama22/go_market/middleware"
 )
@@ -44,7 +45,7 @@ func (c *userRepository) FindAll() []entity.User {
 }
 
 func (c *userRepository) UpdateUser(user entity.User, userId int) {
-	c.db.Model(&user).Where("id = ?", userId).Update(&user)
+	c.db.Model(&user).Where("id = ?", userId).Updates(&user)
 }
 
 func (c *userRepository) DeleteUser(userId int) {

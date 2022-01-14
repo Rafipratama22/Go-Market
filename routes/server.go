@@ -6,7 +6,8 @@ import (
 	"github.com/Rafipratama22/go_market/repository"
 	"github.com/Rafipratama22/go_market/service"
 	"github.com/gin-gonic/gin"
-	gorm "github.com/jinzhu/gorm"
+	// gorm "github.com/jinzhu/gorm"
+	gorm "gorm.io/gorm"
 	"go.mongodb.org/mongo-driver/mongo"
 	"github.com/Rafipratama22/go_market/middleware"
 )

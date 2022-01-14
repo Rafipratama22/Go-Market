@@ -5,7 +5,8 @@ import (
 	"log"
 
 	"github.com/Rafipratama22/go_market/routes"
-	gorm "github.com/jinzhu/gorm"
+	// gorm "github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 	"github.com/joho/godotenv"
 )
 
@@ -22,6 +23,6 @@ func init() {
 
 func main() {
 	route := routing.Router()
-	defer db.Close()
+	// defer db.Close()
 	route.Run(":8080")
 }

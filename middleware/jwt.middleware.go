@@ -10,7 +10,8 @@ import (
 	// "github.com/Rafipratama22/go_market/service"
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
-	gorm "github.com/jinzhu/gorm"
+	"gorm.io/gorm"
+	// gorm "github.com/jinzhu/gorm"
 )
 
 var (

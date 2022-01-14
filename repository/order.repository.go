@@ -1,12 +1,15 @@
 package repository
 
 import (
+	// "fmt"
+
 	"github.com/Rafipratama22/go_market/entity"
-	"github.com/jinzhu/gorm"
+	// "github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 type OrderRepository interface {
-	CreateOrder(body entity.Order) entity.Order
+	CreateOrder(body entity.Order, order_detail []entity.OrderDetail, address entity.Address) (entity.Order)
 	FindAll() []entity.Order
 	FindOne(order_id string) entity.Order
 	UpdateOne(order_id string, body entity.Order) entity.Order
@@ -23,7 +26,13 @@ func NewOrderRepository(db *gorm.DB) OrderRepository{
 	}
 }
 
-func (c *orderRepository) CreateOrder(body entity.Order) entity.Order{
+func (c *orderRepository) CreateOrder(body entity.Order, order_detail []entity.OrderDetail, address entity.Address) entity.Order{
+	c.db.Model(&order_detail).Create(&order_detail)
+	// fmt.Println(order_details)
+	c.db.Model(&address).Create(&address)
+	// fmt.Println(addresses)
+	body.AddressId = address.ID
+	body.Status = 1
 	c.db.Create(&body)
 	return body
 }
@@ -42,7 +51,7 @@ func (c *orderRepository) FindOne(order_id string) entity.Order {
 
 func (c *orderRepository) UpdateOne(order_id string, body entity.Order) entity.Order {
 	var result entity.Order
-	c.db.Model(&result).Where("order_id = ?", order_id).Update(&result)
+	c.db.Model(&result).Where("order_id = ?", order_id).Updates(&result)
 	return result
 }
 

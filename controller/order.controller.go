@@ -4,6 +4,7 @@ import (
 	"github.com/Rafipratama22/go_market/service"
 	"github.com/gin-gonic/gin"
 	"github.com/Rafipratama22/go_market/entity"
+	"github.com/Rafipratama22/go_market/dto"
 )
 
 type OrderController interface {
@@ -25,7 +26,7 @@ func NewOrderController(service service.OrderService) OrderController {
 }
 
 func (c *orderController) CreateOrder(ctx *gin.Context) {
-	var body entity.Order
+	var body dto.CreateOrder
 	ctx.ShouldBindJSON(&body)
 	result := c.service.CreateOrder(body)
 	ctx.JSON(200, result)
