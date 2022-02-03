@@ -6,7 +6,8 @@ import (
 	"github.com/Rafipratama22/go_market/dto"
 	"github.com/Rafipratama22/go_market/entity"
 	"github.com/Rafipratama22/go_market/repository"
-	"github.com/google/uuid"
+	// "github.com/google/uuid"
+	"crypto/rand"
 )
 
 
@@ -27,11 +28,22 @@ func NewOrderService(repository repository.OrderRepository) OrderService {
 		repository: repository,
 	}
 }
+func makeUUID() string {
+	n := 5
+	b := make([]byte, n)
+	if _, err := rand.Read(b); err != nil {
+		panic(err)
+	}
+	s := fmt.Sprintf("%X", b)
+	fmt.Println(s)
+	return s
+
+}
 
 func (c *orderService) CreateOrder(body dto.CreateOrder) (entity.Order) {
 	var order entity.Order
 	// var order_detail entity.OrderDetail
-	order_id := uuid.New().String()
+	order_id := makeUUID()
 	var address entity.Address
 	var boolAddress bool
 	// var location []byte
@@ -95,3 +107,10 @@ func (c *orderService) UpdateOne(order_id string, body entity.Order) entity.Orde
 func (c *orderService) DeleteOne(order_id string) {
 	c.repository.DeleteOne(order_id)
 }
+
+
+// student-03-001ce81a9a9f@qwiklabs.net
+// student-03-6230df30116e@qwiklabs.net
+// cAUAQZNCJkz6
+// qwiklabs-gcp-03-85bc31ec833e
+// qwiklabs-gcp-03-279d29713d38

@@ -5,7 +5,7 @@ type VANumber struct {
     VaNumber string `json:"va_number"`
 }
 
-type PaymenAmounts struct {
+type PaymentAmounts struct {
     PaidAt string `json:"paid_at"`
     Amount string `json:"amount"`
 }

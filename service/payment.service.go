@@ -4,11 +4,8 @@ import (
 	"github.com/Rafipratama22/go_market/entity"
 	// "github.com/Rafipratama22/go_market/dto"
 	"fmt"
-
-	// "github.com/jinzhu/gorm"
 	"gorm.io/gorm"
 	"encoding/json"
-	// "github.com/midtrans/midtrans-go"
 	"github.com/midtrans/midtrans-go"
 	"github.com/midtrans/midtrans-go/coreapi"
 )
@@ -115,6 +112,10 @@ func permataTransaction(va_number string, order_id string, total_price int) *cor
 		},
 	}
 	return chargeReq
+}
+
+func creditCardTransaction() {
+	// chargeReq := 
 }
 
 func (c *paymentService) CreatePayment(payment MidtransConfig) *coreapi.ChargeResponse{
